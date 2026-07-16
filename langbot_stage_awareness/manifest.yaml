@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Plugin
+metadata:
+  author: langbot_stage_awareness
+  name: DifyNodeTypeAwareness
+  repository: ''
+  version: 0.1.0
+  description:
+    en_US: Dify workflow node type awareness plugin for real-time node output visibility
+    zh_Hans: Dify 工作流节点类型感知插件，用于实时显示节点输出内容
+    ja_JP: Dify ワークフローノードタイプ認識プラグイン、リアルタイムノード出力可視化
+  label:
+    en_US: DifyNodeAwareness
+    zh_Hans: Dify 节点感知
+    ja_JP: Dify ノード感知
+  icon: assets/icon.svg
+spec:
+  config:
+    - name: api_base_url
+      type: string
+      label:
+        en_US: Dify API Base URL
+        zh_Hans: Dify API 基础地址
+      description:
+        en_US: 'Base URL for Dify API (e.g., https://api.dify.ai/v1 for cloud, or your self-hosted URL)'
+        zh_Hans: 'Dify API 基础地址（云端版本使用 https://api.dify.ai/v1，自托管版本使用您的服务器地址）'
+      default: 'https://api.dify.ai/v1'
+      required: true
+    - name: dify_apikey
+      type: string
+      label:
+        en_US: Dify API Key
+        zh_Hans: Dify API Key
+      description:
+        en_US: 'API key from your Dify instance'
+        zh_Hans: '从您的 Dify 实例获取的 API Key'
+      default: ''
+      required: true
+    - name: workflow_id
+      type: string
+      label:
+        en_US: Workflow ID (Optional)
+        zh_Hans: 工作流 ID（可选）
+      description:
+        en_US: 'Optional: Specific workflow ID to monitor. If empty, monitors all workflows.'
+        zh_Hans: '可选：要监控的特定工作流 ID。如果为空，则监控所有工作流。'
+      default: ''
+      required: false
+    - name: node_types
+      type: array
+      item_type: string
+      label:
+        en_US: Node Types to Monitor
+        zh_Hans: 要监控的节点类型
+      description:
+        en_US: 'List of Dify node types that should trigger message notifications (e.g., ["direct_output", "llm"])'
+        zh_Hans: '应触发消息通知的 Dify 节点类型列表（例如 ["direct_output", "llm"]）'
+      default: ["direct_output"]
+      required: true
+    - name: enable_metrics
+      type: boolean
+      label:
+        en_US: Enable Metrics
+        zh_Hans: 启用指标
+      description:
+        en_US: 'Whether to collect and expose metrics'
+        zh_Hans: '是否收集和暴露指标'
+      default: true
+      required: false
+  components:
+    EventListener:
+      fromDirs:
+      - path: components/event_listener/
+execution:
+  python:
+    path: main.py
+    attr: DifyNodeTypeAwarenessPlugin

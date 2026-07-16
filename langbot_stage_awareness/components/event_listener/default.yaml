@@ -1,0 +1,3 @@
+# Event Listener Component Configuration
+# This file is required for component discovery but doesn't require specific configuration for basic event listeners
+{}
