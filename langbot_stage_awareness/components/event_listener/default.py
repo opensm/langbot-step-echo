@@ -26,15 +26,20 @@ class DefaultEventListener(EventListener):
 
 
     async def initialize(self):
-        await super().initialize()
-        # Register event handlers
-        @self.handler(events.PersonMessageReceived)
-        async def person_message_handler(event_context: context.EventContext):
-            await self._handle_message(event_context)
+        try:
+            await super().initialize()
+            # Register event handlers
+            @self.handler(events.PersonMessageReceived)
+            async def person_message_handler(event_context: context.EventContext):
+                await self._handle_message(event_context)
 
-        @self.handler(events.GroupMessageReceived)
-        async def group_message_handler(event_context: context.EventContext):
-            await self._handle_message(event_context)
+            @self.handler(events.GroupMessageReceived)
+            async def group_message_handler(event_context: context.EventContext):
+                await self._handle_message(event_context)
+            logger.info("DifyNodeTypeAwarenessEventListener 初始化完成")
+        except Exception as e:
+            logger.error(f"DifyNodeTypeAwarenessEventListener 初始化失败: {e}", exc_info=True)
+            raise
 
     async def _handle_message(self, event_context: context.EventContext):
         """Handle incoming messages by preventing default behavior and processing via Dify workflow"""
@@ -349,12 +354,7 @@ class DefaultEventListener(EventListener):
 
     async def destroy(self):
         """Clean up resources when the component is stopped."""
-        try:
+        # Call parent destroy if it exists
+        if hasattr(super(), "destroy"):
             await super().destroy()
-        except AttributeError:
-            # Parent class doesn't have destroy method, ignore
-            pass
-        except Exception:
-            # Ignore any other errors during cleanup
-            pass
         logger.info("DifyNodeTypeAwarenessEventListener destroyed")
