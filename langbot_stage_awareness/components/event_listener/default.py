@@ -26,6 +26,7 @@ class DefaultEventListener(EventListener):
 
 
     async def initialize(self):
+        """Initialize the event listener component."""
         try:
             await super().initialize()
             # Register event handlers
@@ -354,7 +355,6 @@ class DefaultEventListener(EventListener):
 
     async def destroy(self):
         """Clean up resources when the component is stopped."""
-        # Call parent destroy if it exists
-        if hasattr(super(), "destroy"):
-            await super().destroy()
-        logger.info("DifyNodeTypeAwarenessEventListener destroyed")
+        # Intentionally left empty to avoid any possible issues during shutdown
+        # The base class should handle any necessary cleanup
+        pass

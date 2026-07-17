@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 class DifyNodeTypeAwarenessPlugin(BasePlugin):
 
     async def initialize(self) -> None:
+        """Initialize the plugin."""
         try:
             logger.info("DifyNodeTypeAwarenessPlugin 初始化")
             await super().initialize()
@@ -18,12 +19,8 @@ class DifyNodeTypeAwarenessPlugin(BasePlugin):
             logger.error(f"DifyNodeTypeAwarenessPlugin 初始化失败: {e}", exc_info=True)
             raise
 
-    def __del__(self) -> None:
-        # Will be called when plugin is terminating
-        logger.info("DifyNodeTypeAwarenessPlugin 卸载")
-
     async def destroy(self) -> None:
         """Clean up resources when the plugin is stopped."""
-        if hasattr(super(), "destroy"):
-            await super().destroy()
-        logger.info("DifyNodeTypeAwarenessPlugin destroyed")
+        # Intentionally left empty to avoid any possible issues during shutdown
+        # The base class should handle any necessary cleanup
+        pass
