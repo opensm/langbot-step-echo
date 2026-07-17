@@ -7,7 +7,7 @@
           <value>
             <TabSessionState>
               <option name="provider" value="claude" />
-              <option name="sessionId" value="4185ffba-14da-4887-b9c6-d8df26ac31e8" />
+              <option name="sessionId" value="45cc3e0a-5240-49f9-813a-ef6a15dd26ac" />
               <option name="cwd" value="E:\Coding\langbot_detail" />
               <option name="model" value="claude-opus-4-8[1m]" />
               <option name="permissionMode" value="bypassPermissions" />

@@ -43,8 +43,32 @@ class DefaultEventListener(EventListener):
         event_context.prevent_default()
 
         try:
-            # Extract the message text
-            message_text = self._extract_message_text(event_context.event.message_chain)
+            # Extract the message text with robust attribute access
+            event = event_context.event
+            message_chain = None
+
+            # Try to get message_chain attribute (preferred in LangBot)
+            if hasattr(event, 'message_chain'):
+                message_chain = event.message_chain
+            # Fallback to message attribute if message_chain not available
+            elif hasattr(event, 'message'):
+                message_chain = event.message
+            else:
+                # Log available attributes for debugging
+                available_attrs = [attr for attr in dir(event) if not attr.startswith('_')]
+                logger.warning(f"Event {type(event).__name__} has no message attribute. Available attributes: {available_attrs}")
+                await event_context.reply(
+                    MessageChain([Plain(text="Unable to process message format - missing message data")])
+                )
+                return
+
+            if not message_chain:
+                await event_context.reply(
+                    MessageChain([Plain(text="I didn't receive a valid message. Please try again.")])
+                )
+                return
+
+            message_text = self._extract_message_text(message_chain)
             if not message_text:
                 await event_context.reply(
                     MessageChain([Plain(text="I didn't receive a valid message. Please try again.")])
