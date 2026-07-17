@@ -14,7 +14,6 @@ from langbot_plugin.api.entities.builtin.platform.message import MessageChain, P
 logger = logging.getLogger(__name__)
 
 
-
 class DefaultEventListener(EventListener):
     def __init__(self):
         super().__init__()
@@ -320,6 +319,7 @@ class DefaultEventListener(EventListener):
                     return value
 
         return None
+
     def _format_content(self, content: dict) -> str:
         """Format content dictionary as a readable string"""
         try:
@@ -346,3 +346,15 @@ class DefaultEventListener(EventListener):
         except Exception as e:
             logger.error(f"Failed to send node notification: {e}")
             # Don't fail the whole process if notification fails
+
+    async def destroy(self):
+        """Clean up resources when the component is stopped."""
+        try:
+            await super().destroy()
+        except AttributeError:
+            # Parent class doesn't have destroy method, ignore
+            pass
+        except Exception:
+            # Ignore any other errors during cleanup
+            pass
+        logger.info("DifyNodeTypeAwarenessEventListener destroyed")

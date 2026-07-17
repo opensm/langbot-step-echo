@@ -17,3 +17,15 @@ class DifyNodeTypeAwarenessPlugin(BasePlugin):
     def __del__(self) -> None:
         # Will be called when plugin is terminating
         logger.info("DifyNodeTypeAwarenessPlugin 卸载")
+
+    async def destroy(self) -> None:
+        """Clean up resources when the plugin is stopped."""
+        try:
+            await super().destroy()
+        except AttributeError:
+            # Parent class doesn't have destroy method, ignore
+            pass
+        except Exception:
+            # Ignore any other errors during cleanup
+            pass
+        logger.info("DifyNodeTypeAwarenessPlugin destroyed")
